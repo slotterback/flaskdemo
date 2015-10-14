@@ -6,12 +6,18 @@ def index(): pass
 
 @app.route( '/login', methods = [ 'GET', 'POST' ] )
 def login():
-    url_for( 'static', filename = 'style.css' )
-    # 'style.css' is stored in /static/style.css
+    error = None
     if request.method == 'POST':
-        do_the_login()
-    else:
-        show_the_login_form()
+        if valid_login( request.form[ 'username' ],
+                        request.form[ 'password' ] ):
+            return log_the_user_in( request.form[ 'username' ] )
+        else:
+            error = 'Invalid username/password'
+    # the code below is executed if the request method
+    # was GET or the credentials were invalid
+    return render_template( 'login.html', error = error )
+
+searchword = request.args.get( 'key', '' )
     
 @app.route( '/user/<username>' )
 def profile( username ): pass
