@@ -1,28 +1,19 @@
-from flask import Flask, url_for, render_template, Markup, request, make_response
+from flask import Flask, url_for, render_template, Markup, request, make_response, abort, redirect
 from werkzeug import secure_filename
 app = Flask( __name__ )
 
 @app.route( '/' )
 def index():
-    username = request.cookies.get( 'username' )
-    # use cookies.get(key) instead of cookies[key] to not get a
-    # KeyError if the cookie is missing.
-    resp = make_response( render_template(...) )
-    resp.set_cookie( 'username', 'the username' )
-    return resp
+    return redirect( url_for( 'login' ) )
 
-@app.route( '/login', methods = [ 'GET', 'POST' ] )
+@app.route( '/login' )
 def login():
-    error = None
-    if request.method == 'POST':
-        if valid_login( request.form[ 'username' ],
-                        request.form[ 'password' ] ):
-            return log_the_user_in( request.form[ 'username' ] )
-        else:
-            error = 'Invalid username/password'
-    # the code below is executed if the request method
-    # was GET or the credentials were invalid
-    return render_template( 'login.html', error = error )
+    abort( 401 )
+    this_is_never_executed()
+    
+@app.errorhandler( 404 )
+def page_not_found( error ):
+    return render_template( 'page_not_found.html' ), 404
 
 searchword = request.args.get( 'key', '' )
     
