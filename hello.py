@@ -1,4 +1,5 @@
 from flask import Flask, url_for, render_template, Markup, request
+from werkzeug import secure_filename
 app = Flask( __name__ )
 
 @app.route( '/' )
@@ -21,6 +22,14 @@ searchword = request.args.get( 'key', '' )
     
 @app.route( '/user/<username>' )
 def profile( username ): pass
+
+@app.route( '/upload', methods = [ 'GET', 'POST' ] )
+def upload_file():
+    if request.method == 'POST':
+        f = reques.files[ 'the_file' ]
+        f.save( '/var/www/uploads/' + secure_filename( f.filename ) )
+        
+    ...
         
 with app.test_request_context():
     print( url_for( 'index' ) )
