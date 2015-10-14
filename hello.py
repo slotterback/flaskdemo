@@ -1,9 +1,15 @@
-from flask import Flask, url_for, render_template, Markup, request
+from flask import Flask, url_for, render_template, Markup, request, make_response
 from werkzeug import secure_filename
 app = Flask( __name__ )
 
 @app.route( '/' )
-def index(): pass
+def index():
+    username = request.cookies.get( 'username' )
+    # use cookies.get(key) instead of cookies[key] to not get a
+    # KeyError if the cookie is missing.
+    resp = make_response( render_template(...) )
+    resp.set_cookie( 'username', 'the username' )
+    return resp
 
 @app.route( '/login', methods = [ 'GET', 'POST' ] )
 def login():
@@ -28,8 +34,8 @@ def upload_file():
     if request.method == 'POST':
         f = reques.files[ 'the_file' ]
         f.save( '/var/www/uploads/' + secure_filename( f.filename ) )
-        
-    ...
+    return
+    
         
 with app.test_request_context():
     print( url_for( 'index' ) )
