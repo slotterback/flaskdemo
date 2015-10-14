@@ -5,7 +5,9 @@ app = Flask( __name__ )
 def index(): pass
 
 @app.route( '/login', methods = [ 'GET', 'POST' ] )
-def login(): 
+def login():
+    url_for( 'static', filename = 'style.css' )
+    # 'style.css' is stored in /static/style.css
     if request.method == 'POST':
         do_the_login()
     else:
